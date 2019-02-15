@@ -1,28 +1,48 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <section class="todoapp">
+			<header class="header">
+				<h1>todos</h1>
+				<input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
+			</header>
+			<section class="main">
+				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="todo-list">
+					<li class="todo">
+						<div class="view">
+							<input class="toggle" type="checkbox">
+							<label></label>
+							<button class="destroy"></button>
+						</div>
+						<input class="edit" type="text">
+					</li>
+				</ul>
+			</section>
+			<footer class="footer">
+				<span class="todo-count">
+					<strong></strong> left
+				</span>
+				<ul class="filters">
+					<li><a href="#">All</a></li>
+					<li><a href="#">Active</a></li>
+					<li><a href="#">Completed</a></li>
+				</ul>
+				<button class="clear-completed">
+					Clear completed
+				</button>
+			</footer>
+		</section>
+		<footer class="info">
+			<p>Double-click to edit a todo</p>
+			<p>Written by <a href="https:oomusou.io">Sam Xiao</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'app',
-  components: {
-    HelloWorld
-  }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
