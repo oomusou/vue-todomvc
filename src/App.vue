@@ -11,7 +11,7 @@
 				<ul class="todo-list">
 					<li v-for="(item, index) in todos" :key="index" :class="displayMode(item)">
 						<div class="view">
-							<input class="toggle" type="checkbox">
+							<input v-model="item.completed" class="toggle" type="checkbox">
 							<label @dblclick="editTodo(item)">{{ item.title }}</label>
 							<button @click="removeTodo(item)" class="destroy"></button>
 						</div>
@@ -47,7 +47,7 @@
 const addTodo = function() {
   if (!this.todo) return;
 
-  this.todos = [...this.todos, { title: this.todo, edit: false }];
+  this.todos = [...this.todos, { title: this.todo, edit: false, completed: false }];
   this.todo = '';
 };
 
@@ -65,7 +65,7 @@ const editTodo = function(item) {
 
 /** 顯示模式的 CSS */
 const displayMode = function(item) {
-  return { editing: item.edit };
+  return { editing: item.edit, completed: item.completed };
 };
 
 /** 儲存 todo */
