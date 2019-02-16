@@ -3,16 +3,16 @@
     <section class="todoapp">
 			<header class="header">
 				<h1>todos</h1>
-				<input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
+				<input v-model="todo" @keyup.enter="addTodo" class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
 			</header>
 			<section class="main">
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
-					<li class="todo">
+					<li v-for="(item, index) in todos" :key="index"  class="todo">
 						<div class="view">
 							<input class="toggle" type="checkbox">
-							<label></label>
+							<label>{{ item.title }}</label>
 							<button class="destroy"></button>
 						</div>
 						<input class="edit" type="text">
@@ -42,7 +42,25 @@
 </template>
 
 <script>
+
+/** 新增 todo */
+const addTodo = function() {
+  if (!this.todo) return;
+
+  this.todos = [...this.todos, { title: this.todo }];
+  this.todo = '';
+};
+
 export default {
   name: 'app',
+  data: () => ({
+    /** 新增的 todo */
+    todo: '',
+    /** 所有 todos */
+    todos: [],
+  }),
+  methods: {
+    addTodo,
+  }
 }
 </script>
