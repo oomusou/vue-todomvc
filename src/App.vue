@@ -9,13 +9,13 @@
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
-					<li v-for="(item, index) in todos" :key="index"  class="todo">
+					<li v-for="(item, index) in todos" :key="index" :class="displayMode(item)">
 						<div class="view">
 							<input class="toggle" type="checkbox">
-							<label>{{ item.title }}</label>
+							<label @dblclick="editTodo(item)">{{ item.title }}</label>
 							<button @click="removeTodo(item)" class="destroy"></button>
 						</div>
-						<input class="edit" type="text">
+						<input v-model="item.title" @keyup.enter="updateTodo(item)" @blur="updateTodo(item)" @keyup.esc="cancelTodo(item)" class="edit" type="text">
 					</li>
 				</ul>
 			</section>
@@ -47,7 +47,7 @@
 const addTodo = function() {
   if (!this.todo) return;
 
-  this.todos = [...this.todos, { title: this.todo }];
+  this.todos = [...this.todos, { title: this.todo, edit: false }];
   this.todo = '';
 };
 
@@ -57,6 +57,28 @@ const removeTodo = function(item) {
   this.todos = this.todos.filter(cb);
 };
 
+/** 編輯 todo */
+const editTodo = function(item) {
+  this.oldTitle = item.title;
+  item.edit = true;
+};
+
+/** 顯示模式的 CSS */
+const displayMode = function(item) {
+  return { editing: item.edit };
+};
+
+/** 儲存 todo */
+const updateTodo = function(item) {
+  item.edit = false;
+};
+
+/** 取消儲存 todo */
+const cancelTodo = function(item) {
+  item.title = this.oldTitle;
+  item.edit = false;
+};
+
 export default {
   name: 'app',
   data: () => ({
@@ -64,10 +86,16 @@ export default {
     todo: '',
     /** 所有 todos */
     todos: [],
+    /** 編輯前的 title */
+    oldTitle: '',
   }),
   methods: {
     addTodo,
     removeTodo,
+    editTodo,
+    displayMode,
+    updateTodo,
+    cancelTodo,
   }
 }
 </script>
