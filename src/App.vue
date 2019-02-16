@@ -13,7 +13,7 @@
 						<div class="view">
 							<input class="toggle" type="checkbox">
 							<label>{{ item.title }}</label>
-							<button class="destroy"></button>
+							<button @click="removeTodo(item)" class="destroy"></button>
 						</div>
 						<input class="edit" type="text">
 					</li>
@@ -51,6 +51,12 @@ const addTodo = function() {
   this.todo = '';
 };
 
+/** 刪除 todo */
+const removeTodo = function(item) {
+  const cb = x => !(x.title === item.title);
+  this.todos = this.todos.filter(cb);
+};
+
 export default {
   name: 'app',
   data: () => ({
@@ -61,6 +67,7 @@ export default {
   }),
   methods: {
     addTodo,
+    removeTodo,
   }
 }
 </script>
