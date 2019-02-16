@@ -9,7 +9,7 @@
 				<input id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
-					<li v-for="(item, index) in todos" :key="index" :class="displayMode(item)">
+					<li v-for="(item, index) in filteredTodos" :key="index" :class="displayMode(item)">
 						<div class="view">
 							<input v-model="item.completed" class="toggle" type="checkbox">
 							<label @dblclick="editTodo(item)">{{ item.title }}</label>
@@ -24,9 +24,9 @@
 					<strong></strong> left
 				</span>
 				<ul class="filters">
-					<li><a href="#">All</a></li>
-					<li><a href="#">Active</a></li>
-					<li><a href="#">Completed</a></li>
+					<li><a @click="allTodos" :class="clickedCSS('all')" href="javascript:void(0)">All</a></li>
+					<li><a @click="activeTodos" :class="clickedCSS('active')" href="javascript:void(0)">Active</a></li>
+					<li><a @click="completedTodos" :class="clickedCSS('completed')" href="javascript:void(0)">Completed</a></li>
 				</ul>
 				<button class="clear-completed">
 					Clear completed
@@ -79,16 +79,54 @@ const cancelTodo = function(item) {
   item.edit = false;
 };
 
+/** 顯示全部 todo */
+const allTodos = function() {
+  this.filterCb = x => x;
+  this.filterMode = 'all';
+};
+
+/** 顯示未完成 todo */
+const activeTodos = function() {
+  this.filterCb = x => !x.completed;
+  this.filterMode = 'active';
+};
+
+/** 顯示已完成 todo */
+const completedTodos = function() {
+  this.filterCb = x => x.completed;
+  this.filterMode = 'completed';
+};
+
+/** 已經過過濾的 todo */
+const filteredTodos = function() {
+  return this.todos.filter(this.filterCb);
+};
+
+/** 回傳按下過濾 button 該顯示的 CSS */
+const clickedCSS = function(mode) {
+  return { selected:  this.filterMode === mode };
+};
+
 export default {
   name: 'app',
-  data: () => ({
-    /** 新增的 todo */
-    todo: '',
-    /** 所有 todos */
-    todos: [],
-    /** 編輯前的 title */
-    oldTitle: '',
-  }),
+  data: function() {
+    return {
+      /** 新增的 todo */
+      todo: '',
+      /** 所有 todos */
+      todos: [],
+      /** 編輯前的 title */
+      oldTitle: '',
+      /** 過濾 callback */
+      filterCb: x => x,
+      /** 目前的 filter mode */
+      filterMode: 'all'
+    };
+  },
+  computed: {
+    /** 過濾的 todo */
+    filteredTodos,
+  },
   methods: {
     addTodo,
     removeTodo,
@@ -96,6 +134,10 @@ export default {
     displayMode,
     updateTodo,
     cancelTodo,
+    allTodos,
+    activeTodos,
+    completedTodos,
+    clickedCSS,
   }
 }
 </script>
