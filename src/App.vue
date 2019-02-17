@@ -28,7 +28,7 @@
 					<li><a @click="activeTodos" :class="clickedCSS('active')" href="javascript:void(0)">Active</a></li>
 					<li><a @click="completedTodos" :class="clickedCSS('completed')" href="javascript:void(0)">Completed</a></li>
 				</ul>
-				<button class="clear-completed">
+				<button @click="clearCompletedTodos" class="clear-completed">
 					Clear completed
 				</button>
 			</footer>
@@ -107,6 +107,12 @@ const clickedCSS = function(mode) {
   return { selected:  this.filterMode === mode };
 };
 
+/** 刪除已完成 todo */
+const clearCompletedTodos = function() {
+  const cb = x => !x.completed;
+  this.todos = this.todos.filter(cb);
+};
+
 export default {
   name: 'app',
   data: function() {
@@ -138,6 +144,7 @@ export default {
     activeTodos,
     completedTodos,
     clickedCSS,
+    clearCompletedTodos,
   }
 }
 </script>
