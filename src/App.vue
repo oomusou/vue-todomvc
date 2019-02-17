@@ -21,7 +21,7 @@
 			</section>
 			<footer class="footer">
 				<span class="todo-count">
-					<strong></strong> left
+					<strong>{{ activeTodosCount }}</strong> item left
 				</span>
 				<ul class="filters">
 					<li><a @click="allTodos" :class="clickedCSS('all')" href="javascript:void(0)">All</a></li>
@@ -113,6 +113,12 @@ const clearCompletedTodos = function() {
   this.todos = this.todos.filter(cb);
 };
 
+/** 未完成 todo 數量 */
+const activeTodosCount = function() {
+  const cb = x => !x.completed;
+  return this.todos.filter(cb).length;
+};
+
 export default {
   name: 'app',
   data: function() {
@@ -130,8 +136,8 @@ export default {
     };
   },
   computed: {
-    /** 過濾的 todo */
     filteredTodos,
+    activeTodosCount,
   },
   methods: {
     addTodo,
