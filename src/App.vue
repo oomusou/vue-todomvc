@@ -6,7 +6,7 @@
 				<input v-model="todo" @keyup.enter="addTodo" class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
 			</header>
 			<section class="main">
-				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<input v-model="allCompleted" id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
 					<li v-for="(item, index) in filteredTodos" :key="index" :class="displayMode(item)">
@@ -119,6 +119,17 @@ const activeTodosCount = function() {
   return this.todos.filter(cb).length;
 };
 
+/* 使全部為 completed */
+const allCompleted = {
+  get: function() {
+    return this.activeTodosCount === 0;
+  },
+  set: function() {
+    const cb = x => ({ title: x.title, edit: x.edit, completed: true });
+    this.todos = this.todos.map(cb);
+  },
+};
+
 export default {
   name: 'app',
   data: function() {
@@ -138,6 +149,7 @@ export default {
   computed: {
     filteredTodos,
     activeTodosCount,
+    allCompleted,
   },
   methods: {
     addTodo,
