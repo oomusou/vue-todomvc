@@ -5,7 +5,7 @@
 				<h1>todos</h1>
 				<input v-model="todo" @keyup.enter="addTodo" class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?">
 			</header>
-			<section class="main">
+			<section class="main" v-if="isShowTodos">
 				<input v-model="allCompleted" id="toggle-all" class="toggle-all" type="checkbox">
 				<label for="toggle-all">Mark all as complete</label>
 				<ul class="todo-list">
@@ -19,7 +19,7 @@
 					</li>
 				</ul>
 			</section>
-			<footer class="footer">
+			<footer v-if="isShowTodos" class="footer">
 				<span class="todo-count">
 					<strong>{{ activeTodosCount }}</strong> item left
 				</span>
@@ -28,7 +28,7 @@
 					<li><a @click="activeTodos" :class="clickedCSS('active')" href="javascript:void(0)">Active</a></li>
 					<li><a @click="completedTodos" :class="clickedCSS('completed')" href="javascript:void(0)">Completed</a></li>
 				</ul>
-				<button @click="clearCompletedTodos" class="clear-completed">
+				<button @click="clearCompletedTodos" v-if="isShowClearCompleted" class="clear-completed">
 					Clear completed
 				</button>
 			</footer>
@@ -119,15 +119,25 @@ const activeTodosCount = function() {
   return this.todos.filter(cb).length;
 };
 
-/* 使全部為 completed */
+/** 使全部為 completed */
 const allCompleted = {
   get: function() {
-    return this.activeTodosCount === 0;
+    return !this.activeTodosCount;
   },
   set: function() {
     const cb = x => ({ title: x.title, edit: x.edit, completed: true });
     this.todos = this.todos.map(cb);
   },
+};
+
+/** 是否顯示 todos */
+const isShowTodos = function() {
+  return this.todos.length;
+};
+
+/** 是否顯示 Clear Computed */
+const isShowClearCompleted = function() {
+  return this.todos.length > this.activeTodosCount;
 };
 
 export default {
@@ -150,6 +160,8 @@ export default {
     filteredTodos,
     activeTodosCount,
     allCompleted,
+    isShowTodos,
+    isShowClearCompleted
   },
   methods: {
     addTodo,
