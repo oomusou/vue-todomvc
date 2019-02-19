@@ -53,7 +53,7 @@ const addTodo = function() {
 
 /** 刪除 todo */
 const removeTodo = function(item) {
-  const cb = x => !(x.title === item.title);
+  const cb = x => x.title !== item.title;
   this.todos = this.todos.filter(cb);
 };
 
@@ -87,13 +87,13 @@ const allTodos = function() {
 
 /** 顯示未完成 todo */
 const activeTodos = function() {
-  this.filterCb = x => !x.completed;
+  this.filterCb = x => !x.completed === true;
   this.filterMode = 'active';
 };
 
 /** 顯示已完成 todo */
 const completedTodos = function() {
-  this.filterCb = x => x.completed;
+  this.filterCb = x => x.completed === true;
   this.filterMode = 'completed';
 };
 
@@ -142,8 +142,7 @@ const isShowClearCompleted = function() {
 
 export default {
   name: 'app',
-  data: function() {
-    return {
+  data: () => ({
       /** 新增的 todo */
       todo: '',
       /** 所有 todos */
@@ -154,8 +153,7 @@ export default {
       filterCb: x => x,
       /** 目前的 filter mode */
       filterMode: 'all'
-    };
-  },
+  }),
   computed: {
     filteredTodos,
     activeTodosCount,
